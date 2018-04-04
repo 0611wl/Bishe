@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">BiShe</string>
+    <string name="appPath">http://10.0.2.2:8080/StudyOnline</string>
+    <string name="login">http://10.0.2.2:8080/StudyOnline/androidLogin.action</string>
+    <string name="chapters">http://10.0.2.2:8080/StudyOnline/getCourseChapters.action</string>
+    <string name="materials">http://10.0.2.2:8080/StudyOnline/getChapterMaterial.action</string>
+    <string name="title_activity_course">CourseActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_chpaters">ChpatersActivity</string>
+    <string name="title_activity_chapter_list">ChapterListActivity</string>
+    <string name="title_activity_video_page">VideoPage</string>
+    <string name="title_activity_office">OfficeActivity</string>
+    <string name="title_activity_materials">Materials</string>
+</resources>
