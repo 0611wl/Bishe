@@ -1,9 +1,11 @@
 package com.example.administrator.bishe;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.administrator.bishe.entities.Material;
+import com.example.administrator.bishe.handler.HttpHandler;
 import com.example.administrator.bishe.util.GsonUtil;
 import com.tencent.smtt.sdk.TbsReaderView;
 
@@ -29,9 +32,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Materials extends AppCompatActivity {
+public class Materials extends AppCompatActivity implements TbsReaderView.ReaderCallback{
     @BindView(R.id.materialList) public ListView materialList;
-    private TbsReaderView mTbsReaderView;
+
+    public TbsReaderView mTbsReaderView;
+    private ProgressDialog progressDialog;
     private DownloadManager mDownloadManager;
     private long mRequestId;
     private DownloadObserver mDownloadObserver;
@@ -72,12 +77,12 @@ public class Materials extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         //todo 如果本地存在该文件,直接展示
-                        if(true){
-
+                        if(isLocalExist(material.getMaterialFileName())){
+                            displayFile(material.getMaterialFileName());
                         }
                         //todo 如果本地不存在,就下载
                         else{
-
+                            startDownload(material.getMaterialFileName(),getString(R.string.appPath));
                         }
 
                     }
@@ -110,9 +115,9 @@ public class Materials extends AppCompatActivity {
     }
 
     //展示
-    private void displayFile() {
+    private void displayFile(String mFileName) {
         Bundle bundle = new Bundle();
-        bundle.putString("filePath", getLocalFile().getPath());
+        bundle.putString("filePath", getLocalFile(mFileName).getPath());
         bundle.putString("tempPath", Environment.getExternalStorageDirectory().getPath());
         boolean result = mTbsReaderView.preOpen(parseFormat(mFileName), false);
         if (result) {
@@ -135,11 +140,11 @@ public class Materials extends AppCompatActivity {
         return fileName;
     }
 
-    private File getLocalFile() {
+    private File getLocalFile(String mFileName) {
         return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
     }
 
-    private void startDownload() {
+    private void startDownload(String mFileName,String mFileUrl) {
         mDownloadObserver = new DownloadObserver(new Handler());
         getContentResolver().registerContentObserver(Uri.parse("content://downloads/my_downloads"), true, mDownloadObserver);
 
@@ -164,12 +169,14 @@ public class Materials extends AppCompatActivity {
                 //状态所在的列索引
                 int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
                 Log.i("downloadUpdate: ", currentBytes + " " + totalBytes + " " + status);
-                //todo 这里给handler发message算了
-//                mDownloadBtn.setText("正在下载：" + currentBytes + "/" + totalBytes);
-//                if (DownloadManager.STATUS_SUCCESSFUL == status && mDownloadBtn.getVisibility() == View.VISIBLE) {
-//                    mDownloadBtn.setVisibility(View.GONE);
-//                    mDownloadBtn.performClick();
-//                }
+                //todo 晓得这里得不得崩哦 再说再说
+                progressDialog.setMessage("已下载: " + currentBytes + "/" + totalBytes);
+                if (DownloadManager.STATUS_SUCCESSFUL == status) {
+                    //todo 先啥子都不干 喊他点两到
+//                    materialList.setVisibility(View.GONE);
+//
+//                    displayFile();
+                }
             }
         } finally {
             if (cursor != null) {
@@ -178,9 +185,6 @@ public class Materials extends AppCompatActivity {
         }
     }
 
-    private File getLocalFile(String fileName){
-        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-    }
     private boolean isLocalExist(String fileName){
         return getLocalFile(fileName).exists();
     }
@@ -190,7 +194,8 @@ public class Materials extends AppCompatActivity {
         }
         @Override
         public void onChange(boolean selfChange,Uri uri){
-
+            Log.i("downloadUpdate: ", "onChange(boolean selfChange, Uri uri)");
+            queryDownloadStatus();
         }
     }
 }
