@@ -16,6 +16,31 @@ public class DataCenter {
     }
     private StudentData studentData = new StudentData();
     private CourseData courseData = new CourseData();
+    private ChapterData chapterData = new ChapterData();
+
+    public ChapterData getChapterData() {
+        return chapterData;
+    }
+
+    public void setChapterData(ChapterData chapterData) {
+        this.chapterData = chapterData;
+    }
+
+    public StudentData getStudentData() {
+        return studentData;
+    }
+
+    public void setStudentData(StudentData studentData) {
+        this.studentData = studentData;
+    }
+
+    public CourseData getCourseData() {
+        return courseData;
+    }
+
+    public void setCourseData(CourseData courseData) {
+        this.courseData = courseData;
+    }
 
     public Student getStudent(){
         return studentData.getStudent();

@@ -22,7 +22,7 @@ public class HttpHandler extends Handler{
     public void handleMessage(Message msg){
         switch (msg.what){
             case REQUEST_FAIL:
-                Toast toast = Toast.makeText(context,"请求失败",Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(context,"十块钱的服务器，莫法",Toast.LENGTH_LONG);
                 toast.show();
                 break;
             case EMPTY_DATA:

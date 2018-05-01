@@ -15,7 +15,6 @@ public class Material implements Serializable{
     private int materialType;
     private String materialName;
     private String materialPath;
-    private String materialFileName;
     public int getMaterialId() {
         return materialId;
     }
@@ -39,12 +38,6 @@ public class Material implements Serializable{
     }
     public void setMaterialPath(String materialPath) {
         this.materialPath = materialPath;
-    }
-    public String getMaterialFileName() {
-        return materialFileName;
-    }
-    public void setMaterialFileName(String materialFileName) {
-        this.materialFileName = materialFileName;
     }
 }
 

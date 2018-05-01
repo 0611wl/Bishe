@@ -16,6 +16,7 @@ import com.example.administrator.bishe.data.DataCenter;
 import com.example.administrator.bishe.entities.Chapter;
 import com.example.administrator.bishe.entities.Course;
 import com.example.administrator.bishe.handler.HttpHandler;
+import com.example.administrator.bishe.util.ClockUtil;
 import com.example.administrator.bishe.util.GsonUtil;
 import com.example.administrator.bishe.util.HttpUtil;
 import com.example.administrator.bishe.util.MessageUtil;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,10 +44,13 @@ import okhttp3.Response;
 public class LoginSuccessActivity extends AppCompatActivity {
     @BindView(R.id.courseList) public ListView courseList;
     @BindView(R.id.notChooseCourseList) public  ListView notChooseCourseList;
+    private int second;
+    //prviate int studentId = 0;
     private Handler handler = new HttpHandler(LoginSuccessActivity.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        second = ClockUtil.getSecond();
         setContentView(R.layout.activity_login_success);
         ButterKnife.bind(this);
         courseList.setAdapter(new BaseAdapter() {
@@ -112,6 +117,7 @@ public class LoginSuccessActivity extends AppCompatActivity {
                                 List<Chapter> chapters = GsonUtil.toList(chapterData.toString(),Chapter.class);
                                 Intent intent = new Intent(LoginSuccessActivity.this,ChapterListActivity.class);
                                 intent.putExtra("chapters",(Serializable) chapters);
+                                DataCenter.getInstance().getCourseData().setCurrentCourse(course.getCourseId());
                                 startActivity(intent);
                             }
                         });
@@ -194,5 +200,14 @@ public class LoginSuccessActivity extends AppCompatActivity {
 
         listView.setLayoutParams(params);
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        int time = ((int)System.currentTimeMillis()/1000) - second;
+        Map<Object,Object> map = new HashMap<>();
+       // map.put("studentId",)
+        //HttpUtil.sendHttpRequest(getString(R.string.appPath)/"addTime",);
     }
 }

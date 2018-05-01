@@ -28,7 +28,16 @@ android {
         ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }
     }
 }
-
+android {
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'

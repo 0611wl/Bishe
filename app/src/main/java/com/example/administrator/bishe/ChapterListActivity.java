@@ -8,12 +8,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.administrator.bishe.data.DataCenter;
 import com.example.administrator.bishe.entities.Chapter;
 import com.example.administrator.bishe.handler.HttpHandler;
 import com.example.administrator.bishe.util.HttpUtil;
@@ -87,6 +89,7 @@ public class ChapterListActivity extends AppCompatActivity {
                             }
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
+                                Log.d("请求返回","返回了得嘛 报锤子错啊");
                                 String jsonData = response.body().string();
                                 if(jsonData == null || jsonData.length() == 0){
                                     handler.sendMessage(MessageUtil.createMessage(HttpHandler.EMPTY_DATA));
@@ -94,6 +97,7 @@ public class ChapterListActivity extends AppCompatActivity {
                                 }
                                 Intent intent = new Intent(ChapterListActivity.this,Materials.class);
                                 intent.putExtra("materialData",jsonData);
+                                DataCenter.getInstance().getChapterData().setCurChapterId(chapter.getChapterId());
                                 startActivity(intent);
                             }
                         });

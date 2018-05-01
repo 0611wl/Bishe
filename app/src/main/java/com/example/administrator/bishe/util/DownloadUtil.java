@@ -1,9 +1,4 @@
-package com.example.administrator.bishe.util;
-
-/**
- * Created by Administrator on 2018/3/14 0014.
- */
-
+package  com.example.administrator.bishe.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
